@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Post;
+use App\Form\PostType;
 use App\Repository\PostRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -45,11 +46,7 @@ class PostController extends AbstractController
     {
         $isUpdate = !is_null($post);
 
-        $form = $this->createFormBuilder($post ?? new Post())
-            ->add('title')
-            ->add('text')
-            ->getForm();
-
+        $form = $this->createForm(PostType::class, $post ?? new Post());
         $form->handleRequest($request);
 
         if (!$form->isSubmitted() || !$form->isValid()) {
