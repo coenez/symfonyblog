@@ -4,5 +4,5 @@
 {% block bread %} > Post {% endblock %}
 
 {% block body %}
-    {{ include('post/_post.html.twig', {post: post}) }}
+    {{ include('post/_post.html.twig', {post: post, summary: false}) }}
 {% endblock %}

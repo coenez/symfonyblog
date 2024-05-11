@@ -5,7 +5,13 @@
         </a>
     </div>
     <div class="text-xl dark:text-gray-400">
-        {{ post.text }}
+        {% if summary %}
+            {{ post.text | slice(0, 70) }} ... <br/>
+            <a class="text-decoration-line: underline" href="{{ path('app_post_show', { id: post.id }) }}">Read more</a>
+        {% else %}
+            {{ post.text }}
+        {% endif %}
+
     </div>
     <div class="text-gray-500 dark:text-gray-400">
         {{ post.created | date("M j, Y") }}
@@ -14,5 +20,7 @@
         <a href="#">Like <span class="px-2 rounded-md bg-gray-200 dark:bg-gray-700">0</span></a>
     </div>
     <div class="text-sm text-gray-500 dark:text-gray-400"><a href="#">user@email.com</a></div>
-    <div><a href="{{ path('app_post_edit', { id: post.id }) }}">Edit post</a></div>
+    {% if not summary %}
+        <div><a href="{{ path('app_post_edit', { id: post.id }) }}">Edit post</a></div>
+    {% endif %}
 </div>
