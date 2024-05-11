@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 {% block title %} Edit post {% endblock %}
 
-{% block bread %} > Edit Post {% endblock %}
+{% block bread %} > <a href="{{ path('app_post_show', {id: post.id}) }}">Post</a> > Edit {% endblock %}
 
 {% block body %}
     <h3>Edit post</h3>

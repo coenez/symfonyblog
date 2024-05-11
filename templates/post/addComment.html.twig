@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 {% block title %} Post - Add Comment {% endblock %}
 
-{% block bread %} > Post Comment {% endblock %}
+{% block bread %} > <a href="{{ path('app_post_show', {id: post.id}) }}">Post</a> > Comment {% endblock %}
 
 {% block body %}
     {{ include('post/_post.html.twig', {post: post, summary: false}) }}
@@ -11,7 +11,8 @@
 
     <div>
         {{ form_label(form.text, 'New comment', {'label_attr': {'class': 'block text-sm text-gray-700 dark:text-gray-300 font-medium'}}) }}
-        {{ form_widget(form.text, {'attr': {'class': 'block w-full shadow-sm border-gray-300 dark:border-transparent dark:text-gray-800 rounded-md border p-2 mt-1 mb-2'}}) }}
+        <div><---counter here---></div>
+        {{ form_widget(form.text, {'attr': {'class': 'block w-full h-32 shadow-sm border-gray-300 dark:border-transparent dark:text-gray-800 rounded-md border p-2 mt-1 mb-2'}}) }}
         {{ form_errors(form.text) }}
     </div>
 
