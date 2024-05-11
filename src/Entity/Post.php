@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\PostRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: PostRepository::class)]
 class Post
@@ -15,9 +16,13 @@ class Post
     private int $id;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank()]
+    #[Assert\Length(min: 5, max: 255 )]
     private string $title;
 
     #[ORM\Column(length: 500)]
+    #[Assert\NotBlank()]
+    #[Assert\Length(min: 5, max: 500 )]
     private string $text;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
