@@ -1,17 +1,14 @@
 {% extends 'base.html.twig' %}
+{% block title %}All Posts{% endblock %}
+
 {% block body %}
-    <h1>All Posts</h1>
-    <div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
         {% if posts|length > 0%}
             {% for key,post in posts %}
-                <div>{{ post.title }} - {{ post.created|date('D-m-Y') }}</div>
-                <div><a href="{{ path('app_post_show', {id: post.id}) }}">Read more</a></div>
-                <br/>
+                {{ include('post/_post.html.twig', {post: post}) }}
             {% endfor %}
         {% else %}
             No posts
         {% endif %}
     </div>
-
-    <div><a href="{{ path('app_post_add') }}">Add new post</a></div>
 {% endblock %}
