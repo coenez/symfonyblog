@@ -52,7 +52,7 @@ class PostController extends AbstractController
         $form->handleRequest($request);
 
         if (!$form->isSubmitted() || !$form->isValid()) {
-            return $this->render('post/' . ($isUpdate ? 'edit' : 'add') . '.html.twig', ['form' => $form]);
+            return $this->render('post/' . ($isUpdate ? 'edit' : 'add') . '.html.twig', ['form' => $form, 'post' => $post]);
         }
 
         $postToSave = $form->getData();
@@ -64,7 +64,7 @@ class PostController extends AbstractController
         $entityManager->persist($postToSave);
         $entityManager->flush();
 
-        $this->addFlash('success', 'Post has been ' . ($isUpdate ? 'created' : 'updated') . ' successfully');
+        $this->addFlash('success', 'Post has been ' . ($isUpdate ? 'updated' : 'created') . ' successfully');
 
         return $this->redirectToRoute('app_post');
     }
@@ -76,7 +76,7 @@ class PostController extends AbstractController
         $form->handleRequest($request);
 
         if (!$form->isSubmitted() || !$form->isValid()) {
-            return $this->render('post/comment.html.twig', ['form' => $form, 'post' => $post]);
+            return $this->render('post/addComment.html.twig', ['form' => $form, 'post' => $post]);
         }
 
         $comment = $form->getData();
