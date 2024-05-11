@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Comment;
 use App\Entity\Post;
+use App\Form\CommentType;
 use App\Form\PostType;
 use App\Repository\PostRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -19,14 +21,14 @@ class PostController extends AbstractController
         return $this->render('post/index.html.twig', [
             'posts' => $postRepository->findAll(),
         ]);
-
     }
 
     #[Route('/post/{id<\d>}', name: 'app_post_show')]
     public function show(Post $post): Response
     {
         return $this->render('post/show.html.twig', [
-            'post' => $post
+            'post' => $post,
+            'comments' => $post->getComments()
         ]);
     }
 
@@ -65,5 +67,25 @@ class PostController extends AbstractController
         $this->addFlash('success', 'Post has been ' . ($isUpdate ? 'created' : 'updated') . ' successfully');
 
         return $this->redirectToRoute('app_post');
+    }
+
+    #[Route('/post/{id<\d>}/comment', name: 'app_post_comment')]
+    public function addComment(Post $post, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $form = $this->createForm(CommentType::class, new Comment());
+        $form->handleRequest($request);
+
+        if (!$form->isSubmitted() || !$form->isValid()) {
+            return $this->render('post/comment.html.twig', ['form' => $form, 'post' => $post]);
+        }
+
+        $comment = $form->getData();
+        $comment->setPost($post);
+        $entityManager->persist($comment);
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Comment has been added');
+
+        return $this->redirectToRoute('app_post_show', ['id' => $post->getId()]);
     }
 }
