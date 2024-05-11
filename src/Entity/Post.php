@@ -19,7 +19,7 @@ class Post
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank()]
-    #[Assert\Length(min: 5, max: 255 )]
+    #[Assert\Length(min: 5, max: 255)]
     private string $title;
 
     #[ORM\Column(length: 500)]
