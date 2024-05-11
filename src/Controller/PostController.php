@@ -50,7 +50,7 @@ class PostController extends AbstractController
         $form->handleRequest($request);
 
         if (!$form->isSubmitted() || !$form->isValid()) {
-            return $this->render('post/' . ($isUpdate ? 'add' : 'edit') . '.html.twig', ['form' => $form]);
+            return $this->render('post/' . ($isUpdate ? 'edit' : 'add') . '.html.twig', ['form' => $form]);
         }
 
         $postToSave = $form->getData();
