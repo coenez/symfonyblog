@@ -5,4 +5,14 @@
 
 {% block body %}
     {{ include('post/_post.html.twig', {post: post, summary: false}) }}
+
+    <div class="text-2xl">Comments</div>
+    {% if comments|length > 0%}
+        {% for key,comment in comments %}
+            {{ include('comment/_comment.html.twig', {comment: comment}) }}
+        {% endfor %}
+    {% else %}
+        <div class="text-gray-500">No comments</div>
+    {% endif %}
+
 {% endblock %}

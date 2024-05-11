@@ -4,6 +4,13 @@
             {{ post.title }}
         </a>
     </div>
+    <div class="text-gray-500 dark:text-gray-400">{{ post.created | date("M j, Y") }}</div>
+    <div class="flex">
+        {% if summary %}
+            <div class="mr-4">Likes <span class="px-2 rounded-md bg-gray-200 dark:bg-gray-700">0</span></div>
+            <div>Comments <span class="px-2 rounded-md bg-gray-200 dark:bg-gray-700">{{ post.comments.count }}</span></div>
+        {% endif %}
+    </div>
     <div class="text-xl dark:text-gray-400">
         {% if summary %}
             {{ post.text | slice(0, 70) }} ... <br/>
@@ -13,14 +20,15 @@
         {% endif %}
 
     </div>
-    <div class="text-gray-500 dark:text-gray-400">
-        {{ post.created | date("M j, Y") }}
-    </div>
-    <div>
-        <a href="#">Like <span class="px-2 rounded-md bg-gray-200 dark:bg-gray-700">0</span></a>
-    </div>
+
     <div class="text-sm text-gray-500 dark:text-gray-400"><a href="#">user@email.com</a></div>
-    {% if not summary %}
-        <div><a href="{{ path('app_post_edit', { id: post.id }) }}">Edit post</a></div>
-    {% endif %}
+
+    <div class="flex">
+        {% if not summary %}
+            <div><a href="#">Like <span class="px-2 rounded-md bg-gray-200 dark:bg-gray-700 mr-2">0</span></a></div>
+            <div>|<a href="{{ path('app_post_comment', { id: post.id }) }}" class="mr-2 ml-2">Comment</a></div>
+            <div>|<a href="{{ path('app_post_edit', { id: post.id }) }}" class="ml-2">Edit</a></div>
+        {% endif %}
+    </div>
+
 </div>
