@@ -12,14 +12,17 @@ class UserFixtures extends Fixture
     private array $userData = [
         [
             'email' => 'test@test.nl',
+            'role' => 'ROLE_EDITOR',
             'password' => 'test',
         ],
         [
             'email' => 'admin@test.nl',
+            'role' => 'ROLE_ADMIN',
             'password' => 'test',
         ],
         [
             'email' => 'test2@test.nl',
+            'role' => 'ROLE_EDITOR',
             'password' => 'test',
         ],
     ];
@@ -40,6 +43,8 @@ class UserFixtures extends Fixture
                 $user,
                 $row['password']
             ));
+
+            $user->setRoles([$row['role']]);
             $manager->persist($user);
         }
 

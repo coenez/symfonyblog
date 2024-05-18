@@ -12,6 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class PostController extends AbstractController
 {
@@ -33,12 +34,14 @@ class PostController extends AbstractController
     }
 
     #[Route('/post/add', name: 'app_post_add', priority: 2)]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function add(Request $request, EntityManagerInterface $entityManager): Response
     {
-       return $this->save($request, $entityManager);
+        return $this->save($request, $entityManager);
     }
 
     #[Route('/post/{id<\d>}/edit', name: 'app_post_edit')]
+    #[IsGranted('ROLE_EDITOR')]
     public function edit(Post $post, Request $request, EntityManagerInterface $entityManager): Response
     {
         return $this->save($request, $entityManager, $post);
@@ -58,10 +61,6 @@ class PostController extends AbstractController
         $postToSave = $form->getData();
         $postToSave->setAuthor($this->getUser());
 
-        if (!$isUpdate) {
-            $postToSave->setCreated(new \DateTime());
-        }
-
         $entityManager->persist($postToSave);
         $entityManager->flush();
 
@@ -71,6 +70,7 @@ class PostController extends AbstractController
     }
 
     #[Route('/post/{id<\d>}/comment', name: 'app_post_comment')]
+    #[IsGranted('ROLE_COMMENTER')]
     public function addComment(Post $post, Request $request, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(CommentType::class, new Comment());

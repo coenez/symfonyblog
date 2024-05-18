@@ -27,7 +27,7 @@
             </div>
             <div class="text-right">
                 <div class="flex text-sm text-gray-400 dark:text-gray-500">
-                    {% if app.user %}
+                    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                         <div class="mr-4"><a href="{{ path('app_post_add') }}">Add New</a></div>
                         <div><a href="{{ path('app_logout') }}">Logout</a></div>
                     {% else %}
