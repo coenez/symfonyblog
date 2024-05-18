@@ -50,6 +50,7 @@ class Post
     {
         $this->comments = new ArrayCollection();
         $this->likedBy = new ArrayCollection();
+        $this->created = new \DateTime();
     }
 
     public function getId(): ?int
