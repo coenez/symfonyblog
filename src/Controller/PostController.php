@@ -56,6 +56,7 @@ class PostController extends AbstractController
         }
 
         $postToSave = $form->getData();
+        $postToSave->setAuthor($this->getUser());
 
         if (!$isUpdate) {
             $postToSave->setCreated(new \DateTime());
@@ -81,6 +82,7 @@ class PostController extends AbstractController
 
         $comment = $form->getData();
         $comment->setPost($post);
+        $comment->setAuthor($this->getUser());
         $entityManager->persist($comment);
         $entityManager->flush();
 
