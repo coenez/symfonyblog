@@ -42,6 +42,10 @@ class Post
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'liked')]
     private Collection $likedBy;
 
+    #[ORM\ManyToOne(inversedBy: 'posts')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $author = null;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
@@ -139,6 +143,18 @@ class Post
     public function removeLikedBy(User $likedBy): static
     {
         $this->likedBy->removeElement($likedBy);
+
+        return $this;
+    }
+
+    public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(?User $author): static
+    {
+        $this->author = $author;
 
         return $this;
     }

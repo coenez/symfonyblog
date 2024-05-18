@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\Post;
+use App\Repository\UserRepository;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use \Doctrine\Common\DataFixtures\DependentFixtureInterface;
@@ -32,6 +33,10 @@ class PostFixtures extends Fixture implements DependentFixtureInterface
         ],
     ];
 
+    public function __construct(
+        private UserRepository $userRepository
+    ){}
+
     /**
      * Posts are dependent on user presence since a post is created by a user.
      * @return array
@@ -43,10 +48,13 @@ class PostFixtures extends Fixture implements DependentFixtureInterface
 
     public function load(ObjectManager $manager): void
     {
+        $users = $this->userRepository->findAll();
+
         foreach($this->postData as $row) {
             $post = new Post();
             $post->setTitle($row['title']);
             $post->setText($row['text']);
+            $post->setAuthor($users[array_rand($users)]);
             $post->setCreated(new \DateTime($row['created']));
             $manager->persist($post);
         }
