@@ -25,6 +25,7 @@ class PostController extends AbstractController
     }
 
     #[Route('/post/{id<\d>}', name: 'app_post_show')]
+    #[IsGranted(Post::VIEW, 'post')]
     public function show(Post $post): Response
     {
         return $this->render('post/show.html.twig', [
@@ -41,7 +42,7 @@ class PostController extends AbstractController
     }
 
     #[Route('/post/{id<\d>}/edit', name: 'app_post_edit')]
-    #[IsGranted('ROLE_EDITOR')]
+    #[IsGranted(Post::EDIT, 'post')]
     public function edit(Post $post, Request $request, EntityManagerInterface $entityManager): Response
     {
         return $this->save($request, $entityManager, $post);
