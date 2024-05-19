@@ -39,6 +39,7 @@ class UserFixtures extends Fixture
         foreach($this->userData as $row) {
             $user = new User();
             $user->setEmail($row['email']);
+            $user->setVerified(true);
             $user->setPassword($this->userPasswordHasher->hashPassword(
                 $user,
                 $row['password']

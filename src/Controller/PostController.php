@@ -35,7 +35,7 @@ class PostController extends AbstractController
     }
 
     #[Route('/post/add', name: 'app_post_add', priority: 2)]
-    #[IsGranted('IS_AUTHENTICATED_FULLY')]
+    #[IsGranted('ROLE_USER_VERIFIED')]
     public function add(Request $request, EntityManagerInterface $entityManager): Response
     {
         return $this->save($request, $entityManager);
