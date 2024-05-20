@@ -60,7 +60,10 @@ class PostController extends AbstractController
         }
 
         $postToSave = $form->getData();
-        $postToSave->setAuthor($this->getUser());
+
+        if (!$isUpdate) {
+            $postToSave->setAuthor($this->getUser());
+        }
 
         $entityManager->persist($postToSave);
         $entityManager->flush();

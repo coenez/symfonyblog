@@ -1,0 +1,5 @@
+<div class="mr-2">
+    <a href="{{ path('app_post_like', { id: post.id }) }}">
+        Like <span class="px-2 rounded-md bg-gray-200 dark:bg-gray-700 mr-1">{{ post.likedBy.count }}</span>
+    </a>
+</div>
