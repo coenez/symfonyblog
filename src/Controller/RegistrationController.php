@@ -25,7 +25,7 @@ class RegistrationController extends AbstractController
     }
 
     #[Route('/register', name: 'app_register')]
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, Security $security, EntityManagerInterface $entityManager): Response
+    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
@@ -44,14 +44,23 @@ class RegistrationController extends AbstractController
             $entityManager->flush();
 
             // generate a signed url and email it to the user
-            $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
-                (new TemplatedEmail())
-                    ->from(new Address('accounts@symfonyblog.nl', 'Symfony blog'))
-                    ->to($user->getEmail())
-                    ->subject('Please Confirm your Email')
-                    ->htmlTemplate('registration/confirmation_email.html.twig')
-            );
+            try {
+                $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
+                    (new TemplatedEmail())
+                        ->from(new Address('accounts@symfonyblog.nl', 'Symfony blog'))
+                        ->to($user->getEmail())
+                        ->subject('Please Confirm your Email')
+                        ->htmlTemplate('registration/confirmation_email.html.twig')
+                );
+            } catch (\Symfony\Component\Mailer\Exception\TransportException $e) {
+                $this->addFlash('verify_email_error', 'Your registration has been saved. But the e-mail for verification could not be send.');
+                return $this->render('registration/register.html.twig', [
+                    'registrationForm' => $form,
+                    'user' => $user
+                ]);
+            }
 
+            $this->addFlash('success', 'Your registration has been saved. An e-mail for verification has been send.');
             return $this->redirectToRoute('app_post');
         }
 
