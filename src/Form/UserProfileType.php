@@ -21,7 +21,7 @@ class UserProfileType extends AbstractType
             ->add('location')
             ->add('dateOfBirth', DateType::class, [
                 'widget' => 'single_text',
-                'required' => false
+                'required' => true
             ]);
     }
 

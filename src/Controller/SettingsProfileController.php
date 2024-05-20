@@ -10,10 +10,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class SettingsProfileController extends AbstractController
 {
     #[Route('/settings/profile', name: 'app_settings_profile')]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function profile(Request $request, EntityManagerInterface $entityManager): Response
     {
         /**
@@ -30,11 +32,12 @@ class SettingsProfileController extends AbstractController
         }
 
         $userProfile = $form->getData();
-        $entityManager->persist($userProfile);
+        $user->setUserProfile($userProfile);
+        $entityManager->persist($user);
         $entityManager->flush();
 
         $this->addFlash('success', 'Profile has been saved');
 
-        return $this->redirectToRoute('app_post');
+        return $this->redirectToRoute('app_settings_profile');
     }
 }
