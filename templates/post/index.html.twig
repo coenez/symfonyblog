@@ -2,13 +2,5 @@
 {% block title %}All Posts{% endblock %}
 
 {% block body %}
-    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
-        {% if posts|length > 0%}
-            {% for key,post in posts %}
-                {{ include('post/_post.html.twig', {post: post, summary: true}) }}
-            {% endfor %}
-        {% else %}
-            No posts
-        {% endif %}
-    </div>
+    {{ include('post/_post_list.html.twig') }}
 {% endblock %}
