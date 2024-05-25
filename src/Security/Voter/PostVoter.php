@@ -12,7 +12,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class PostVoter extends Voter
 {
     public function __construct(
-        private Security $security
+        private readonly Security $security
     ) {}
 
     protected function supports(string $attribute, mixed $subject): bool
