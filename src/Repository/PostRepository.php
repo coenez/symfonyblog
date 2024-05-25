@@ -3,7 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Post;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -18,11 +20,42 @@ class PostRepository extends ServiceEntityRepository
 
     public function findAllWithComments(): array
     {
-        return $this->createQueryBuilder('p')
-            ->addSelect('c')
-            ->leftJoin('p.comments', 'c')
-            ->orderBy('p.created', 'DESC')
+        return $this->findAllQuery(withComments: true, withLikes: true, withAuthors: true)->getQuery()->getResult();
+    }
+
+    public function findAllByAuthor(int | User $author): array
+    {
+        return $this->findAllQuery(withComments: true, withLikes: true, withProfiles: true)
+            ->where('p.author = :author')
+            ->setParameter('author', $author instanceof User ? $author->getId() : $author)
             ->getQuery()
             ->getResult();
+    }
+
+    private function findAllQuery(bool $withComments = false, bool $withLikes = false, bool $withAuthors = false, bool $withProfiles = false): QueryBuilder
+    {
+        $query = $this->createQueryBuilder('p');
+
+        if ($withComments) {
+            $query->leftJoin('p.comments', 'c')
+                ->addSelect('c');
+        }
+
+        if ($withLikes) {
+            $query->leftJoin('p.likedBy', 'l')
+                ->addSelect('l');
+        }
+
+        if ($withAuthors || $withProfiles) {
+            $query->leftJoin('p.author', 'a')
+                ->addSelect('a');
+        }
+
+        if ($withProfiles) {
+            $query->leftJoin('a.userProfile', 'up')
+                ->addSelect('up');
+        }
+
+        return $query->orderBy('p.created', 'DESC');
     }
 }

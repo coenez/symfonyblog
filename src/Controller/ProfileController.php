@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Repository\PostRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -12,10 +13,11 @@ class ProfileController extends AbstractController
 {
     #[Route('/profile/{id<\d>}', name: 'app_profile')]
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
-    public function show(User $user): Response
+    public function show(User $user, PostRepository $postRepository): Response
     {
         return $this->render('profile/show.html.twig', [
-            'user' => $user ?? null
+            'user' => $user,
+            'posts' => $postRepository->findAllByAuthor($user),
         ]);
     }
 
