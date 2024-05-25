@@ -18,4 +18,22 @@ class ProfileController extends AbstractController
             'user' => $user ?? null
         ]);
     }
+
+    #[Route('/profile/{id<\d>}/follows', name: 'app_profile_follows')]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
+    public function follows(User $user): Response
+    {
+        return $this->render('profile/follows.html.twig', [
+            'user' => $user ?? null
+        ]);
+    }
+
+    #[Route('/profile/{id<\d>}/followers', name: 'app_profile_followers')]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
+    public function followers(User $user): Response
+    {
+        return $this->render('profile/followers.html.twig', [
+            'user' => $user ?? null
+        ]);
+    }
 }

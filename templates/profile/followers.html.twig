@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+{% block title %} User Profile > Followers {% endblock %}
+
+{% block bread %} > User Profile > Followers {% endblock %}
+
+{% block body %}
+    {{ include('profile/_header.html.twig', {user:user}) }}
+    {{ include('profile/_tabs.html.twig', {user:user}) }}
+    {{ include('follower/_follower_list.html.twig', {users:user.followers}) }}
+{% endblock %}
