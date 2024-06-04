@@ -24,6 +24,22 @@ class PostController extends AbstractController
         ]);
     }
 
+    #[Route('/post_topliked', name: 'app_post_topliked')]
+    public function topLiked(PostRepository $postRepository): Response
+    {
+        return $this->render('post/index.html.twig', [
+            'posts' => $postRepository->findAllWithComments(),
+        ]);
+    }
+
+    #[Route('/post_follows', name: 'app_post_follows')]
+    public function follows(PostRepository $postRepository): Response
+    {
+        return $this->render('post/index.html.twig', [
+            'posts' => $postRepository->findAllByAuthor($this->getUser()->getFollows()),
+        ]);
+    }
+
     #[Route('/post/{id<\d>}', name: 'app_post_show')]
     #[IsGranted(Post::VIEW, 'post')]
     public function show(Post $post): Response

@@ -1,0 +1,30 @@
+{% embed 'shared/_tabs.html.twig' %}
+    {% block tabs %}
+        {% embed 'shared/_tab.html.twig' with {route: 'app_post'} %}
+            {% block content %}
+                All Posts
+            {% endblock %}
+            {% block path %}
+                {{ path('app_post') }}
+            {% endblock %}
+        {% endembed %}
+
+        {% embed 'shared/_tab.html.twig' with {route: 'app_post_topliked', classes: 'ml-4'} %}
+            {% block content %}
+                Top liked
+            {% endblock %}
+            {% block path %}
+                {{ path('app_post_topliked') }}
+            {% endblock %}
+        {% endembed %}
+
+        {% embed 'shared/_tab.html.twig' with {route: 'app_post_follows', classes: 'ml-4'} %}
+            {% block content %}
+                From people you follow
+            {% endblock %}
+            {% block path %}
+                {{ path('app_post_follows') }}
+            {% endblock %}
+        {% endembed %}
+    {% endblock %}
+{% endembed %}

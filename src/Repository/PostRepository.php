@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Post;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -23,11 +24,11 @@ class PostRepository extends ServiceEntityRepository
         return $this->findAllQuery(withComments: true, withLikes: true, withAuthors: true)->getQuery()->getResult();
     }
 
-    public function findAllByAuthor(int | User $author): array
+    public function findAllByAuthor(Collection|array $authors): array
     {
         return $this->findAllQuery(withComments: true, withLikes: true, withProfiles: true)
-            ->where('p.author = :author')
-            ->setParameter('author', $author instanceof User ? $author->getId() : $author)
+            ->where('p.author IN(:authors)')
+            ->setParameter('authors', $authors)
             ->getQuery()
             ->getResult();
     }

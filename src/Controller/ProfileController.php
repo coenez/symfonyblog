@@ -17,7 +17,7 @@ class ProfileController extends AbstractController
     {
         return $this->render('profile/show.html.twig', [
             'user' => $user,
-            'posts' => $postRepository->findAllByAuthor($user),
+            'posts' => $postRepository->findAllByAuthor([$user->getId()]),
         ]);
     }
 
