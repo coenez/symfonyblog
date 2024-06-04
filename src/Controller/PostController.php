@@ -28,7 +28,7 @@ class PostController extends AbstractController
     public function topLiked(PostRepository $postRepository): Response
     {
         return $this->render('post/index.html.twig', [
-            'posts' => $postRepository->findAllWithComments(),
+            'posts' => $postRepository->findTopLiked(1),
         ]);
     }
 

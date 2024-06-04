@@ -6,6 +6,7 @@ use App\Entity\Post;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -29,6 +30,23 @@ class PostRepository extends ServiceEntityRepository
         return $this->findAllQuery(withComments: true, withLikes: true, withProfiles: true)
             ->where('p.author IN(:authors)')
             ->setParameter('authors', $authors)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findTopLiked(int $minLikes): array
+    {
+        $ids = $this->findAllQuery(withLikes: true)
+            ->select('p.id')
+            ->groupBy('p.id')
+            ->having('COUNT(l) >= :minLikes')
+            ->setParameter('minLikes', $minLikes)
+            ->getQuery()
+            ->getResult(Query::HYDRATE_SCALAR_COLUMN);
+
+        return $this->findAllQuery(withComments: true, withLikes: true, withAuthors: true, withProfiles: true)
+            ->where('p.id IN(:idList)')
+            ->setParameter('idList', $ids)
             ->getQuery()
             ->getResult();
     }
