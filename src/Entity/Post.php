@@ -46,6 +46,9 @@ class Post
     #[ORM\JoinColumn(nullable: false)]
     private ?User $author = null;
 
+    #[ORM\Column]
+    private ?bool $extraPrivacy = null;
+
     public const EDIT = 'POST_EDIT';
     public const VIEW = 'POST_VIEW';
 
@@ -54,6 +57,7 @@ class Post
         $this->comments = new ArrayCollection();
         $this->likedBy = new ArrayCollection();
         $this->created = new \DateTime();
+        $this->extraPrivacy = false;
     }
 
     public function getId(): ?int
@@ -159,6 +163,18 @@ class Post
     public function setAuthor(?User $author): static
     {
         $this->author = $author;
+
+        return $this;
+    }
+
+    public function isExtraPrivacy(): ?bool
+    {
+        return $this->extraPrivacy;
+    }
+
+    public function setExtraPrivacy(bool $extraPrivacy): static
+    {
+        $this->extraPrivacy = $extraPrivacy;
 
         return $this;
     }

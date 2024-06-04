@@ -47,7 +47,13 @@ class PostVoter extends Voter
                 );
 
             case Post::VIEW:
-                return true;
+                if (!$subject->isExtraPrivacy()) {
+                    return true;
+                }
+                return $isAuthenticated && (
+                    $subject->getAuthor()->getId() === $user->getId() ||
+                    $subject->getAuthor()->getFollows()->contains($user)
+                );
         }
 
         return false;
